@@ -15,10 +15,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // Enable Cors for browser-server communication without security interruptions (cross origin allowance)
 const cors = require('cors');
+const { response } = require('express');
 app.use(cors());
 
 // Initialize app
 app.use(express.static('dist'));
+
+// Designate listening port for incoming requests
 app.listen(8081, function () {
   console.log('Travel App listening on port 8081!')
 });
@@ -26,3 +29,30 @@ app.listen(8081, function () {
 app.get('/', function (req, res) {
   res.sendFile('dist/index.html')
 });
+
+app.post('/geo', function (req, res) {
+  const baseURL = 'https://api.geonames.org/postalCodeSearch?placename=';
+  const apiKey = process.env.API_KEY;
+  console.log(`Your API Key is ${apiKey}`);
+  const cityName = req.body.cityName;
+
+  const params = `${cityName}&maxRows=1&${apiKey}`;
+  const getLocation = baseURL + params;
+
+  fetch(getLocation, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/JSON',
+    }
+  }).then((response) => {
+    return response.json();
+  }).then((data) => {
+    console.log("Response from GeoNames (server-side)", data);
+    res.send({
+      latitude: data.lat,
+      longitude: data.lng,
+      country: data.countryCode
+    })
+  });
+})
+
