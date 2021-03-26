@@ -22,8 +22,8 @@ app.use(cors());
 app.use(express.static('dist'));
 
 // Designate listening port for incoming requests
-app.listen(8081, function () {
-  console.log('Travel App listening on port 8081!')
+app.listen(8082, function () {
+  console.log('Travel App listening on port 8082!')
 });
 
 app.get('/', function (req, res) {
@@ -31,7 +31,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/geo', function (req, res) {
-  const baseURL = 'https://api.geonames.org/postalCodeSearch?placename=';
+  const baseURL = 'http://api.geonames.org/postalCodeLookupJSON?placename=';
   const apiKey = process.env.API_KEY;
   console.log(`Your API Key is ${apiKey}`);
   const cityName = req.body.cityName;
