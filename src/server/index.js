@@ -1,5 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
+
+projectData = {};
 // Express to run server and routes
 const express = require('express');
 /* Dependencies */
@@ -15,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // Enable Cors for browser-server communication without security interruptions (cross origin allowance)
 const cors = require('cors');
-const { response } = require('express');
 app.use(cors());
 
 // Initialize app
@@ -26,10 +27,12 @@ app.listen(8082, function () {
   console.log('Travel App listening on port 8082!')
 });
 
+// Get Route
 app.get('/', function (req, res) {
   res.sendFile('dist/index.html')
 });
 
+// Post Route
 app.post('/geo', function (req, res) {
   const baseURL = 'http://api.geonames.org/postalCodeLookupJSON?placename=';
   const apiKey = process.env.API_KEY;
@@ -49,9 +52,7 @@ app.post('/geo', function (req, res) {
   }).then((data) => {
     console.log("Response from GeoNames (server-side)", data);
     res.send({
-      latitude: data.lat,
-      longitude: data.lng,
-      country: data.countryCode
+      postalcodes: data.postalcodes[0]
     })
   });
 })

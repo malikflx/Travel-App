@@ -16,10 +16,12 @@ function handleSubmit(e) {
     .then(res => res.json())
     .then(function (res) {
       console.log('response from GeoNames (client-side)', res);
-      document.getElementById('latitude').innerHTML = `Latitude: ${res.lat}`;
-      document.getElementById('longitude').innerHTML = `Longitude: ${res.lng}`;
-      document.getElementById('country').innerHTML = `Country: ${res.countryCode}`;
+      document.getElementById('latitude').innerHTML = `Latitude: ${res.postalcodes.lat}`;
+      document.getElementById('longitude').innerHTML = `Longitude: ${res.postalcodes.lng}`;
+      document.getElementById('country').innerHTML = `Country: ${res.postalcodes.countryCode}`;
     })
 }
+
+
 
 export { handleSubmit }
